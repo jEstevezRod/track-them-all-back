@@ -16,6 +16,9 @@ class CreateCategoriesTable extends Migration
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('background_color');
+            $table->string('text_color');
+            $table->string('icon');
             $table->boolean('is_pinned')->default(false);
         });
     }
