@@ -28,12 +28,15 @@ class TransactionController extends Controller
             ->when($request->account_id, function ($query, $accountId) {
                 $query->where('account_id', $accountId);
             })
+            ->orderBy('issued_at', 'desc')
             ->get()
-            ->groupBy(['year', 'month'])
-            ->sortKeysDesc()
-            ->map(function ($months) {
-                return $months->sortKeysDesc();
-            });
+            ->groupBy(['year', 'month']);
+            // ->sortKeys()
+            // ->map(function ($months) {
+                // return $months->sortKeysDesc();
+            // });
+            
+
 
         $transactions->each(function (Collection $monthGroup, $year) use ($transactions) {
             $monthGroup->each(function (Collection $transactionsGroup, $month) use ($year, $transactions) {
@@ -45,9 +48,9 @@ class TransactionController extends Controller
                 });
             });
         });
-
-
-        return response()->json($transactions);
+        $transactionsList = $transactions->all();
+        arsort($transactionsList);
+        return response()->json($transactionsList);
     }
 
     /**
